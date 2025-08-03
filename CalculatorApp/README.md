@@ -1,48 +1,40 @@
-Sure! Here's a clean and professional `README.md` for your calculator app GitHub repo, following the same style as your LinkedIn post:
-
----
-
-````markdown
 # 📱 React Native Themed Calculator
 
-A simple, elegant calculator app built with **React Native** and **TypeScript** — featuring real-time input handling, smooth UI, and **three dynamic themes**.
+A simple and elegant calculator app built with **React Native** and **TypeScript**, featuring real-time input handling and **three dynamic themes**.
 
 ---
 
 ## ✨ Features
 
-- ✅ Basic arithmetic operations: addition, subtraction, multiplication, division
-- 🎨 Three selectable themes:
-  - 🌙 Dark Mode
-  - 🟦 Teal (Default)
-  - 🔴 Red (used on error)
-- 📲 Responsive design
-- ⚠️ Handles edge cases (e.g. division by zero)
-- 🧠 Real-time UI updates and display
+-   ✅ Basic arithmetic operations (+, −, ×, ÷)
+-   ⚠️ Error handling (e.g. division by zero)
+-   🎨 Three switchable themes:
+    -   🌙 Dark
+    -   🟦 Teal (Default)
+    -   🔴 Red (shown on error)
+-   📱 Responsive UI
+-   ⚡ Real-time display updates
 
 ---
 
 ## 📸 Screenshots
 
-| Light/Teal Theme                | Dark Theme                      | Error Mode (Red)              |
-| ------------------------------- | ------------------------------- | ----------------------------- | --------------------------------- |
-| ![Teal](./screenshots/teal.png) | ![Dark](./screenshots/dark.png) | ![Red](./screenshots/red.png) | ![modal](./screenshots/modal.png) |
-
-_(Make sure to create a `/screenshots` folder and add your actual screenshots)_
+| Teal Theme                    | Dark Theme                    | Red Theme                   |                                 | Modal |
+| ----------------------------- | ----------------------------- | --------------------------- | ------------------------------- | ----- |
+| ![Teal](screenshots/teal.png) | ![Dark](screenshots/dark.png) | ![Red](screenshots/red.png) | ![Modal](screenshots/modal.png) |
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone the Repository
+### Clone the repository
 
 ```bash
-git clone https://github.com/charbel-j-estephan/React-Native-projects.git
-cd CalculatorApp
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 ```
-````
 
-### 2. Install Dependencies
+### Install dependencies
 
 ```bash
 npm install
@@ -50,9 +42,7 @@ npm install
 yarn
 ```
 
-### 3. Run the App
-
-Make sure you have your Android/iOS emulator running or a device connected:
+### Run the app
 
 ```bash
 npx react-native run-android
@@ -64,47 +54,29 @@ npx react-native run-ios
 
 ## 🧠 Why I Built This
 
-As a student starting with React Native, I wanted to challenge myself with a small but complete project. This calculator helped me understand component structure, state handling, styling, and working with dynamic themes. It’s the foundation for more complex apps involving user interaction and data.
+As a beginner in mobile development, I wanted to create something small yet complete. This calculator helped me explore:
+
+-   React Native component structure
+-   Dynamic theming
+-   State and input management
+-   Handling edge cases
 
 ---
 
-## 🔮 Next Steps
+## 🔮 What's Next
 
-- ⛅ Integrate live APIs (weather, currency, etc.)
-- 📜 Add a calculation history panel
-- 💾 Possibly local storage support
-
----
-
-## 📂 Project Structure
-
-```
-├── components/
-│   ├── Button.tsx
-│   └── ThemeToggle.tsx
-├── assets/
-│   └── icons/
-├── themes/
-│   └── colors.ts
-├── App.tsx
-└── ...
-```
+-   🌐 API integration (weather, currency, etc.)
+-   🕘 History tracking
+-   💾 Local data persistence
 
 ---
 
-## 📃 License
+## 📄 License
 
-MIT License. Free to use, fork, and modify.
-
----
-
-## 🙌 Contributions
-
-Feedback and contributions are welcome! Feel free to open issues or submit PRs.
-
-```
+MIT License — feel free to use, modify, and share.
 
 ---
 
-Let me know your actual GitHub repo URL, and I’ll personalize the clone link and footer section. Want me to also generate the screenshot placeholders with your images?
-```
+## 🙌 Feedback
+
+Open to feedback and suggestions! Feel free to open an issue or submit a pull request.
