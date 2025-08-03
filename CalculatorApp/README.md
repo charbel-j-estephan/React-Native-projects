@@ -25,8 +25,8 @@ A simple, elegant calculator app built with **React Native** and **TypeScript** 
 ## 📸 Screenshots
 
 | Light/Teal Theme                | Dark Theme                      | Error Mode (Red)              |
-| ------------------------------- | ------------------------------- | ----------------------------- |
-| ![Teal](./screenshots/teal.png) | ![Dark](./screenshots/dark.png) | ![Red](./screenshots/red.png) |
+| ------------------------------- | ------------------------------- | ----------------------------- | --------------------------------- |
+| ![Teal](./screenshots/teal.png) | ![Dark](./screenshots/dark.png) | ![Red](./screenshots/red.png) | ![modal](./screenshots/modal.png) |
 
 _(Make sure to create a `/screenshots` folder and add your actual screenshots)_
 
@@ -37,8 +37,8 @@ _(Make sure to create a `/screenshots` folder and add your actual screenshots)_
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/themed-calculator-app.git
-cd themed-calculator-app
+git clone https://github.com/charbel-j-estephan/React-Native-projects.git
+cd CalculatorApp
 ```
 ````
 
