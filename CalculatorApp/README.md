@@ -9,9 +9,9 @@ A simple and elegant calculator app built with **React Native** and **TypeScript
 -   ✅ Basic arithmetic operations (+, −, ×, ÷)
 -   ⚠️ Error handling (e.g. division by zero)
 -   🎨 Three switchable themes:
-    -   🌙 Dark
-    -   🟦 Teal (Default)
-    -   🔴 Red (shown on error)
+    -   🌙 Dark (Default)
+    -   🟦 Teal 
+    -   🔴 Red
 -   📱 Responsive UI
 -   ⚡ Real-time display updates
 
@@ -19,18 +19,18 @@ A simple and elegant calculator app built with **React Native** and **TypeScript
 
 ## 📸 Screenshots
 
+- **Modal Theme Changer**
+  ![Modal Theme Changer Screenshot](screenshots/modal.png)
+  
 - **Teal Theme**  
   ![Teal Theme Screenshot](screenshots/teal.png)
 
 - **Dark Theme**  
   ![Dark Theme Screenshot](screenshots/dark.png)
 
-- **Red Theme (Error)**  
+- **Red Theme**  
   ![Red Theme Screenshot](screenshots/red.png)
-
-- **Modal Theme Changer**
-  ![Modal Theme Changer Screenshot](screenshots/modal.png)
-
+  
 ---
 
 ## 🚀 Getting Started
