@@ -1,13 +1,18 @@
+import React, { useState } from 'react';
 import {
   Text,
   View,
   StyleSheet,
   Dimensions,
   Platform,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  Image
 } from 'react-native';
 
 import CalcButton from './app/components/button';
-import { useState } from 'react';
+import { themes } from './theme';
 
 const btnRatio = 4;
 const btnGap = 5;
@@ -20,59 +25,57 @@ const buttons1 = ['7', '8', '9'];
 const buttons2 = ['4', '5', '6'];
 const buttons3 = ['1', '2', '3'];
 
-const B1 = "#505050";
-const B2 = "#1c1c1c";
-const B3 = "#FF9500";
+type ThemeKey = keyof typeof themes;
 
 export default function App() {
   const [currentNumbers, setCurrentNumbers] = useState<string[]>([]);
-  const [result, setResult] = useState<string>("");
+  const [result, setResult] = useState<string>('');
   const [justEvaluated, setJustEvaluated] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState<ThemeKey>('dark');
+  const [themeModalVisible, setThemeModalVisible] = useState(false);
 
-const handleOnPress = (value: string) => {
-  const operators = ['+', '-', '*', '/'];
-  const last = currentNumbers[currentNumbers.length - 1];
+  const theme = themes[currentTheme];
 
-  // If last action was "=" and user starts typing again
-  if (justEvaluated) {
-    // If typing a number (start new expression)
+  const handleOnPress = (value: string) => {
+    const operators = ['+', '-', '*', '/'];
+    const last = currentNumbers[currentNumbers.length - 1];
+
+    if (justEvaluated) {
+      if (!operators.includes(value)) {
+        if (value === '.') {
+          setCurrentNumbers(['0.']);
+        } else {
+          setCurrentNumbers([value]);
+        }
+      } else {
+        if (result !== '') {
+          setCurrentNumbers([result, value]);
+        } else {
+          return;
+        }
+      }
+      setJustEvaluated(false);
+      return;
+    }
+
     if (!operators.includes(value)) {
-      if (value === '.') {
-        setCurrentNumbers(['0.']);
+      if (last === undefined || operators.includes(last)) {
+        if (value === '.') {
+          setCurrentNumbers([...currentNumbers, '0.']);
+        } else {
+          setCurrentNumbers([...currentNumbers, value]);
+        }
       } else {
-        setCurrentNumbers([value]);
+        if (value === '.' && last.includes('.')) return;
+        const newLast = last + value;
+        const newArr = [...currentNumbers.slice(0, -1), newLast];
+        setCurrentNumbers(newArr);
       }
     } else {
-      // If typing an operator, start with result then operator
-      if (result !== "") {
-        setCurrentNumbers([result, value]);
-      } else {
-        return;
-      }
+      if (last === undefined || operators.includes(last)) return;
+      setCurrentNumbers([...currentNumbers, value]);
     }
-    setJustEvaluated(false);
-    return;
-  }
-
-  // Normal behavior
-  if (!operators.includes(value)) {
-    if (last === undefined || operators.includes(last)) {
-      if (value === '.') {
-        setCurrentNumbers([...currentNumbers, '0.']);
-      } else {
-        setCurrentNumbers([...currentNumbers, value]);
-      }
-    } else {
-      if (value === '.' && last.includes('.')) return;
-      const newLast = last + value;
-      const newArr = [...currentNumbers.slice(0, -1), newLast];
-      setCurrentNumbers(newArr);
-    }
-  } else {
-    if (last === undefined || operators.includes(last)) return;
-    setCurrentNumbers([...currentNumbers, value]);
-  }
-};
+  };
 
   const handleOnRemove = () => {
     const oldItems = [...currentNumbers];
@@ -103,77 +106,137 @@ const handleOnPress = (value: string) => {
     }
   };
 
-const handleEvaluate = () => {
-  try {
-    const expression = currentNumbers.join('');
-    const evalResult = eval(expression); // Use safe parser later
-    setResult(evalResult.toString());
-    setJustEvaluated(true); // Set the flag
-  } catch (e) {
-    setResult("Error");
-    setJustEvaluated(false);
-  }
-};
-
-
+  const handleEvaluate = () => {
+    try {
+      const expression = currentNumbers.join('');
+      const evalResult = eval(expression);
+      setResult(evalResult.toString());
+      setJustEvaluated(true);
+    } catch (e) {
+      setResult('Error');
+      setJustEvaluated(false);
+    }
+  };
 
   return (
-    <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+
+      {/* Top left theme button */}
+      <TouchableOpacity
+        style={styles.themeButton}
+        onPress={() => setThemeModalVisible(true)}
+      >
+        <Image
+    source={require('./assets/icons/control.png')}
+    style={{ width: 24, height: 24, tintColor: theme.text }}
+    resizeMode="contain"
+  />
+      </TouchableOpacity>
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={themeModalVisible}
+        onRequestClose={() => setThemeModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: theme.background }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Select Theme</Text>
+            <FlatList
+              data={Object.keys(themes) as ThemeKey[]}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.modalItem, { backgroundColor: currentTheme === item ? theme.B3 : theme.B1 }]}
+                  onPress={() => {
+                    setCurrentTheme(item);
+                    setThemeModalVisible(false);
+                  }}
+                >
+                  <Text style={{ color: theme.text, fontSize: 18 }}>
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity
+              style={[styles.modalCloseBtn, { borderColor: theme.text }]}
+              onPress={() => setThemeModalVisible(false)}
+            >
+              <Text style={{ color: theme.text }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.ResultContainer}>
-        <Text style={styles.calculations}>{currentNumbers.join('')}</Text>
-        <Text style={styles.result}>{result}</Text>
+        <Text style={[styles.calculations, { color: theme.text }]}>
+          {currentNumbers.join('')}
+        </Text>
+        <Text style={[styles.result, { color: theme.text }]}>
+          {result}
+        </Text>
       </View>
 
       <View style={styles.ButtonContainer}>
-        <CalcButton onPress={() => { setCurrentNumbers([]); setResult(""); setJustEvaluated(false);}} title={"AC"} style={styles.calcBtn} color={B1} />
-        <CalcButton onPress={() => percentage()} title={"%"} style={styles.calcBtn} color={B1} />
-        <CalcButton onPress={() => plusMinus()} title={"±"} style={styles.calcBtn} color={B1} />
-        <CalcButton onPress={() => handleOnPress('/')} title={"/"} style={styles.calcBtn} color={B3} />
+        <CalcButton onPress={() => { setCurrentNumbers([]); setResult(''); setJustEvaluated(false); }} title="AC" style={styles.calcBtn} color={theme.B1} textColor={theme.text}/>
+        <CalcButton onPress={percentage} title="%" style={styles.calcBtn} color={theme.B1} textColor={theme.text} />
+        <CalcButton onPress={plusMinus} title="±" style={styles.calcBtn} color={theme.B1}textColor={theme.text} />
+        <CalcButton onPress={() => handleOnPress('/')} title="/" style={styles.calcBtn} color={theme.B3} textColor={theme.text}/>
 
-        {buttons1.map(btn => (
-          <CalcButton onPress={() => handleOnPress(btn)} key={btn} title={btn} style={styles.calcBtn} color={B2} />
+        {buttons1.map((btn) => (
+          <CalcButton key={btn} onPress={() => handleOnPress(btn)} title={btn} style={styles.calcBtn} color={theme.B2} textColor={theme.text} />
         ))}
-        <CalcButton onPress={() => handleOnPress('*')} title={"×"} style={styles.calcBtn} color={B3} />
+        <CalcButton onPress={() => handleOnPress('*')} title="×" style={styles.calcBtn} color={theme.B3} textColor={theme.text}/>
 
-        {buttons2.map(btn => (
-          <CalcButton onPress={() => handleOnPress(btn)} key={btn} title={btn} style={styles.calcBtn} color={B2} />
+        {buttons2.map((btn) => (
+          <CalcButton key={btn} onPress={() => handleOnPress(btn)} title={btn} style={styles.calcBtn} color={theme.B2} textColor={theme.text} />
         ))}
-        <CalcButton onPress={() => handleOnPress('-')} title={"−"} style={styles.calcBtn} color={B3} />
+        <CalcButton onPress={() => handleOnPress('-')} title="−" style={styles.calcBtn} color={theme.B3} textColor={theme.text}/>
 
-        {buttons3.map(btn => (
-          <CalcButton onPress={() => handleOnPress(btn)} key={btn} title={btn} style={styles.calcBtn} color={B2} />
+        {buttons3.map((btn) => (
+          <CalcButton key={btn} onPress={() => handleOnPress(btn)} title={btn} style={styles.calcBtn} color={theme.B2} textColor={theme.text}/>
         ))}
-        <CalcButton onPress={() => handleOnPress('+')} title={"+"} style={styles.calcBtn} color={B3} />
+        <CalcButton onPress={() => handleOnPress('+')} title="+" style={styles.calcBtn} color={theme.B3} textColor={theme.text}/>
 
-        <CalcButton onPress={handleOnRemove} title={"DEL"} style={styles.calcBtn} color={B2} />
-        <CalcButton onPress={() => handleOnPress('0')} title={"0"} style={styles.calcBtn} color={B2} />
-        <CalcButton onPress={() => handleOnPress('.')} title={"."} style={styles.calcBtn} color={B2} />
-        <CalcButton onPress={handleEvaluate} title={"="} style={styles.calcBtn} color={B3} />
+        <CalcButton onPress={handleOnRemove} title="DEL" style={styles.calcBtn} color={theme.B2} textColor={theme.text} />
+        <CalcButton onPress={() => handleOnPress('0')} title="0" style={styles.calcBtn} color={theme.B2} textColor={theme.text}/>
+        <CalcButton onPress={() => handleOnPress('.')} title="." style={styles.calcBtn} color={theme.B2} textColor={theme.text}/>
+        <CalcButton onPress={handleEvaluate} title="=" style={styles.calcBtn} color={theme.B3} textColor={theme.text}/>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  themeButton: {
+  position: 'absolute',
+  top: Platform.OS === 'ios' ? 50 : 30,
+  left: 15,
+  padding: 10,
+  borderRadius: 50,
+  zIndex: 10,
+},
+
   container: {
     paddingTop: 30,
     flex: 1,
-    backgroundColor: 'black',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   ResultContainer: {
-    alignItems: "flex-end",
-    justifyContent: "flex-end",
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
     padding: 10,
   },
   ButtonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: btnGap,
     paddingHorizontal: paddingSize,
-    alignContent: "flex-end",
+    alignContent: 'flex-end',
     paddingBottom: 20,
   },
   calcBtn: {
@@ -185,13 +248,44 @@ const styles = StyleSheet.create({
   result: {
     fontWeight: 'bold',
     fontSize: 30,
-    color: '#D4D4D2',
-    fontFamily:"Orbitron Regular",
+    fontFamily: 'Orbitron Regular',
   },
   calculations: {
     fontWeight: '700',
     fontSize: 25,
-    color: '#D4D4D2',
-    opacity: 0.5
-  }
+    opacity: 0.5,
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    borderRadius: 10,
+    padding: 20,
+    maxHeight: '60%',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  modalCloseBtn: {
+    marginTop: 15,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+  },
 });
