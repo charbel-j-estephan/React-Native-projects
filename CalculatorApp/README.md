@@ -19,9 +19,9 @@ A simple and elegant calculator app built with **React Native** and **TypeScript
 
 ## 📸 Screenshots
 
-| Teal Theme                    | Dark Theme                    | Red Theme                   |                                 | Modal |
-| ----------------------------- | ----------------------------- | --------------------------- | ------------------------------- | ----- |
-| ![Teal](screenshots/teal.png) | ![Dark](screenshots/dark.png) | ![Red](screenshots/red.png) | ![Modal](screenshots/modal.png) |
+| Teal Theme                    || Dark Theme                    || Red Theme                   ||Modal                            | 
+| ----------------------------- || ----------------------------- || --------------------------- || ------------------------------- |
+| ![Teal](screenshots/teal.png) || ![Dark](screenshots/dark.png) || ![Red](screenshots/red.png) || ![Modal](screenshots/modal.png) |
 
 ---
 
